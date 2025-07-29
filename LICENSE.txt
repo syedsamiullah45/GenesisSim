@@ -1,0 +1,29 @@
+Custom License - GenesisSim by Syed Samiullah
+
+Copyright (c) 2025 Syed Samiullah
+
+This software is provided for educational, research, and experimental use only.
+
+You are permitted to:
+- Use, copy, and modify this software for personal or academic research purposes.
+- Reference and showcase this project with proper attribution to the original author.
+- Build upon this project for non-commercial experimentation, provided credit is preserved.
+
+You are NOT permitted to:
+- Use this software or any derivative in commercial, monetized, or for-profit applications.
+- Publish this work in any academic, media, or public platform without author attribution and written permission.
+- Redistribute modified versions without explicitly crediting the original source.
+- Integrate this software into proprietary systems or closed-source tools without consent.
+
+Author & Ownership:
+This project — including its logic, simulation architecture, symbolic systems, and emergent behavior models — is the intellectual property of Syed Samiullah.
+
+Contact:
+For licensing, collaboration, research inquiries, or permission for extended use, contact:
+
+Syed Samiullah  
+Email: basirsami8@gmail.com  
+GitHub: https://github.com/syedsamiullah45  
+LinkedIn: https://www.linkedin.com/in/syed-samiullah-822817257
+
+Unauthorized commercial or academic use is strictly prohibited.
