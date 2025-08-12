@@ -13,7 +13,6 @@ This is not a game. It's a living world, running on logic.
 - Organisms with internal memory, emotion, hunger, and mutation
 - Emergent roles: Leader, Shaman, Healer, Cannibal, Rebel, etc.
 - Procedural belief systems generated using symbolic glyphs
-- Dream simulation that influences behavior and evolution
 - Tribe formation based on memory, proximity, and belief
 - Disease, energy decay, reproduction, and natural death
 - Click to inspect any organism's stats, beliefs, tribe, memory, and dream state
