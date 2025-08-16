@@ -63,14 +63,14 @@ Neuro-symbolic AGI research
 
 Creative prototyping for indie games and simulations
 
-Author
+### Author
 Syed Samiullah
 Email: basirsami8@gmail.com
 GitHub: github.com/syedsamiullah45
 LinkedIn: linkedin.com/in/syed-samiullah-822817257
 
-License
-This project is released under a custom open-use license.
+### License
+This project is released under a **custom open-use license**. 
 You may use and modify it for non-commercial research, education, or experimentation.
 
 Commercial use, publication, or integration into research projects requires written permission and proper attribution.
