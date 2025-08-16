@@ -8,6 +8,8 @@ It simulates the natural emergence of belief systems, dreams, roles, memory, mut
 
 This is not a game. It's a living world, running on logic.
 
+Source Code: [genesis.py](genesis.py) 
+
 ---
 
 ## Features
