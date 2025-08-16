@@ -1,5 +1,7 @@
 # GenesisSim: Autonomous Civilization Simulator in Pure Python
 
+This repository contains the **GenesisSim white paper** and **Python source code** (main file: `genesis.py`).
+
 **GenesisSim** is a symbolic, memory-driven civilization simulator built entirely in Python using `pygame` and `Perlin noise`.  
 No engines. No sprites. No AI libraries.  
 It simulates the natural emergence of belief systems, dreams, roles, memory, mutation, and death — all from scratch.
