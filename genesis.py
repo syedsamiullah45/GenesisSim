@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 
 # Colors
 BACKGROUND = (8, 12, 25)
-TEXT_COLOR = (180, 220, 255) # Reverted to gmfinal_enhanced.py's TEXT_COLOR
+TEXT_COLOR = (180, 220, 255) 
 HIGHLIGHT = (0, 200, 255)
 FOOD_COLOR = (50, 200, 80)
 WATER_COLOR = (40, 120, 220)
@@ -32,8 +32,8 @@ DESERT_COLOR = (210, 190, 130)
 TUNDRA_COLOR = (220, 240, 255)
 PLAINS_COLOR = (110, 170, 90)
 SETTLEMENT_COLOR = (200, 150, 100)
-WEATHER_RAIN = (100, 150, 200, 100) # From gmfinal_enhanced.py
-WEATHER_STORM = (80, 80, 120, 120) # From gmfinal_enhanced.py
+WEATHER_RAIN = (100, 150, 200, 100) 
+WEATHER_STORM = (80, 80, 120, 120) 
 
 # Fonts
 font_small = pygame.font.SysFont('Arial', 12)
@@ -53,19 +53,19 @@ show_territories = False
 show_disease = False
 show_history = False
 show_paths = False
-show_debug_overlay = False # From gmfinal_enhanced.py
-show_console = False # From gmfinal_enhanced.py
-console_input = "" # From gmfinal_enhanced.py
-weather_state = "clear" # From gmfinal_enhanced.py
-weather_timer = 0 # From gmfinal_enhanced.py
-weather_duration = 300 # From gmfinal_enhanced.py
+show_debug_overlay = False 
+show_console = False 
+console_input = "" 
+weather_state = "clear" 
+weather_timer = 0 
+weather_duration = 300 
 
 # Camera and Zoom
 camera_x, camera_y = 0, 0
 zoom = 1.0
 brightness = 1.0
-selected_organism = None # Global variable for selected organism from 4.py
-last_autosave_time = time.time() # For autosave from 4.py
+selected_organism = None 
+last_autosave_time = time.time() 
 
 # Biome types
 class Biome(Enum):
@@ -145,7 +145,7 @@ def generate_terrain():
     for x in range(WIDTH//10):
         for y in range(HEIGHT//10):
             elevation[x][y] = terrain_noise([x/40, y/40])
-            # Temperature gradient (colder at poles) - from 4.py
+            # Temperature gradient (colder at poles) 
             temperature[x][y] = temperature_noise([x/80, y/80]) - abs(y - HEIGHT//20) / (HEIGHT//10)
             moisture[x][y] = moisture_noise([x/60, y/60])
 
@@ -189,11 +189,11 @@ class Disease:
             self.mortality_rate = min(1.0, self.mortality_rate * random.uniform(0.8, 1.2))
             self.immunity_resistance = min(1.0, self.immunity_resistance * random.uniform(0.8, 1.2))
 
-            # Chance to change symptom - from 100.py
+            # Chance to change symptom 
             if random.random() < 0.2:
                 self.symptoms.append(random.choice(["coughing", "bloating", "skin lesions", "blindness", "paralysis", "rage"]))
 
-            # Rare type change - from 100.py
+            # Rare type change 
             if random.random() < 0.005:
                 self.disease_type = random.choice(list(DiseaseType))
 
@@ -301,8 +301,8 @@ class Organism:
         self.immunities = {}
         self.symptoms = []
         self.disease_start_time = 0
-        self.rect = pygame.Rect(x - self.dna.size, y - self.dna.size, self.dna.size * 2, self.dna.size * 2) # From gmfinal_enhanced.py
-        self.glyph = self.generate_glyph() # From gmfinal_enhanced.py
+        self.rect = pygame.Rect(x - self.dna.size, y - self.dna.size, self.dna.size * 2, self.dna.size * 2) 
+        self.glyph = self.generate_glyph() 
         if parents:
             self.inherit_from_parents(parents)
             self.mutate()
@@ -310,7 +310,7 @@ class Organism:
             self.form_basic_beliefs()
 
     def inherit_from_parents(self, parents):
-        # Inherit traits from parents - from 100.py
+        # Inherit traits from parents 
         self.dna.color = random.choice(parents).dna.color
         self.dna.size = np.mean([p.dna.size for p in parents])
         self.dna.speed = np.mean([p.dna.speed for p in parents])
@@ -321,23 +321,23 @@ class Organism:
         self.dna.immunity = np.mean([p.dna.immunity for p in parents])
         self.dna.preferred_biome = random.choice(parents).dna.preferred_biome
 
-        # Inherit partial immunities - from 100.py
+        # Inherit partial immunities 
         for p in parents:
             for disease_id, immunity in p.immunities.items():
                 self.immunities[disease_id] = immunity * random.uniform(0.7, 0.9)
 
-        # Chance of trait mixing - from 100.py
+        # Chance of trait mixing
         if random.random() < 0.4:
             self.dna.vision_range = random.choice(parents).dna.vision_range
         if random.random() < 0.4:
             self.dna.metabolism = random.choice(parents).dna.metabolism
         if random.random() < 0.4:
             self.dna.limb_count = random.choice(parents).dna.limb_count
-        if random.random() < 0.4: # Added from gmfinal_enhanced.py
+        if random.random() < 0.4: 
             self.dna.shape = random.choice(parents).dna.shape
 
     def mutate(self):
-        # Structural mutations - from 100.py
+        # Structural mutations 
         if random.random() < self.dna.mutation_rate:
             self.dna.size *= random.uniform(0.7, 1.3)
         if random.random() < self.dna.mutation_rate:
@@ -351,35 +351,35 @@ class Organism:
             if self.dna.limb_count > 8:
                 self.dna.limb_count = 8
 
-        # Behavioral mutations - from 100.py
+        # Behavioral mutations 
         if random.random() < self.dna.mutation_rate:
             self.dna.aggression = max(0, min(1, self.dna.aggression + random.uniform(-0.3, 0.3)))
         if random.random() < self.dna.mutation_rate:
             self.dna.sociability = max(0, min(1, self.dna.sociability + random.uniform(-0.3, 0.3)))
 
-        # Cognitive mutations - from 100.py
+        # Cognitive mutations 
         if random.random() < self.dna.mutation_rate / 3:
             self.dna.dream_recall = max(0, min(1, self.dna.dream_recall + random.uniform(-0.15, 0.15)))
 
-        # Disease resistance mutation - from 100.py
+        # Disease resistance mutation 
         if random.random() < self.dna.mutation_rate / 4:
             self.dna.immunity = max(0, min(1, self.dna.immunity + random.uniform(-0.1, 0.1)))
 
-        # Biome preference mutation - from 100.py
+        # Biome preference mutation 
         if random.random() < 0.01:
             self.dna.preferred_biome = random.choice(list(Biome))
 
-        # Rare trait emergence - from 100.py
+        # Rare trait emergence 
         if random.random() < 0.01:
             self.dna.dream_recall += 0.4
         if random.random() < 0.008 and current_phase.value >= Phase.LANGUAGE.value:
             self.dna.intelligence += 0.5
-        if random.random() < 0.02: # Added from gmfinal_enhanced.py
+        if random.random() < 0.02: 
             self.dna.shape = random.choice(['circle', 'triangle', 'pentagon', 'square'])
-        # print(f"Organism {self.id} mutated: size={self.dna.size:.2f}, shape={self.dna.shape}, aggression={self.dna.aggression:.2f}, sociability={self.dna.sociability:.2f}") # From gmfinal_enhanced.py
+        # print(f"Organism {self.id} mutated: size={self.dna.size:.2f}, shape={self.dna.shape}, aggression={self.dna.aggression:.2f}, sociability={self.dna.sociability:.2f}") 
 
     def generate_glyph(self):
-        # Create a simple visual glyph for the organism - from 100.py
+        # Create a simple visual glyph for the organism 
         glyph = []
         elements = ["△", "◯", "□", "◇", "☆", "☾", "☀", "☁", "⚡"]
         for _ in range(3):
@@ -387,7 +387,7 @@ class Organism:
         return "".join(glyph)
 
     def form_basic_beliefs(self):
-        # Form basic origin beliefs - from 100.py
+        # Form basic origin beliefs
         events = [e for e in self.memory.events if e[0] in ["birth", "death", "trauma"]]
         if events:
             event = random.choice(events)
@@ -398,15 +398,15 @@ class Organism:
             elif event[0] == "trauma":
                 self.belief.origin_story = f"The {random.choice(['Pain', 'Sorrow', 'Fear', 'Hunger'])} shaped our beginning"
 
-        # Create a deity - from 100.py
+        # Create a deity 
         deity_name = f"{random.choice(['Great', 'Eternal', 'Silent', 'Hidden', 'All-Seeing'])} {random.choice(['One', 'Spirit', 'Being', 'Presence'])}"
         deity_power = random.choice(["creation", "destruction", "life", "death", "dreams", "storms", "harvest"])
         self.belief.deities.append(f"{deity_name} of {deity_power}")
 
-        # Create a taboo - from 100.py
+        # Create a taboo 
         self.belief.taboos.append(f"Do not {random.choice(['eat', 'touch', 'speak of', 'look at'])} the {random.choice(['red', 'blue', 'shining', 'crawling'])} things")
 
-        # Create a myth - from 100.py
+        # Create a myth 
         myth_subject = random.choice(["the first being", "the great flood", "the sky fire", "the wandering star"])
         myth_lesson = random.choice(["obey the spirits", "share food", "fear the night", "honor ancestors"])
         self.belief.myths.append(f"The myth of {myth_subject} teaches us to {myth_lesson}")
@@ -442,10 +442,10 @@ class Organism:
             self.dream()
             return
         self.age += 1
-        weather_effect = 1.0 # From gmfinal_enhanced.py
-        if weather_state == "rain": # From gmfinal_enhanced.py
+        weather_effect = 1.0 
+        if weather_state == "rain": 
             weather_effect = 0.8
-        elif weather_state == "storm": # From gmfinal_enhanced.py
+        elif weather_state == "storm": 
             weather_effect = 0.6
         self.energy -= self.dna.metabolism * (1.0 + (0.5 if self.disease else 0)) * weather_effect # Modified for weather effect
         self.apply_disease_effects(current_time)
@@ -476,13 +476,13 @@ class Organism:
         if (self.energy > 100 and self.age > 100 and # Easier reproduction
             current_time - self.last_reproduction_time > 100 / simulation_speed): # Earlier reproduction
             self.reproduce(organisms, tribes)
-        self.rect = pygame.Rect(self.x - self.dna.size, self.y - self.dna.size, self.dna.size * 2, self.dna.size * 2) # From gmfinal_enhanced.py
+        self.rect = pygame.Rect(self.x - self.dna.size, self.y - self.dna.size, self.dna.size * 2, self.dna.size * 2) 
 
     def apply_disease_effects(self, current_time):
         if not self.disease:
             return
 
-        # Apply symptoms - from 100.py
+        # Apply symptoms
         if "weakness" in self.disease.symptoms:
             self.dna.speed *= 0.7
         if "rage" in self.disease.symptoms and random.random() < 0.05:
@@ -490,11 +490,11 @@ class Organism:
         if "paralysis" in self.disease.symptoms and random.random() < 0.01:
             self.path = []  # Stop moving
 
-        # Chance of death - from 100.py
+        # Chance of death 
         if random.random() < self.disease.mortality_rate / 1000:
             self.energy = 0
 
-        # Chance to recover - from 100.py
+        # Chance to recover 
         if current_time - self.disease_start_time > self.disease.duration:
             if random.random() < self.dna.immunity:
                 # Develop immunity
@@ -507,27 +507,27 @@ class Organism:
                 self.disease_start_time = current_time
 
     def update_emotions(self):
-        # Increase hunger over time - from 100.py
+        # Increase hunger over time 
         self.emotion.hunger = min(1.0, self.emotion.hunger + 0.001)
 
-        # Fear based on health and environment - from 100.py
+        # Fear based on health and environment 
         self.emotion.fear = (1 - (self.energy / 100)) * 0.5
         if self.get_current_biome() != self.dna.preferred_biome:
             self.emotion.fear = min(1.0, self.emotion.fear + 0.1)
 
-        # Happiness based on biome match - from 100.py
+        # Happiness based on biome match 
         self.emotion.joy = self.biome_happiness() * 0.5
 
-        # Random emotional fluctuations - from 100.py
+        # Random emotional fluctuations 
         self.emotion.rage = max(0, self.emotion.rage + random.uniform(-0.02, 0.02))
         self.emotion.joy = max(0, self.emotion.joy + random.uniform(-0.02, 0.02))
         self.emotion.loyalty = min(1.0, self.emotion.loyalty + random.uniform(-0.01, 0.01))
-        if weather_state == "storm": # From gmfinal_enhanced.py
+        if weather_state == "storm": 
             self.emotion.fear = min(1.0, self.emotion.fear + 0.2)
             self.emotion.curiosity = max(0, self.emotion.curiosity - 0.1)
 
     def move(self):
-        # Simple random movement with biome preference - from 100.py
+        # Simple random movement with biome preference
         if self.dna.preferred_biome != self.get_current_biome() and random.random() < 0.7:
             # Try to move toward preferred biome
             angle = random.uniform(0, 2 * math.pi)
@@ -540,13 +540,13 @@ class Organism:
                     self.y += math.sin(angle) * self.dna.speed
                     return
 
-        # Otherwise random move - from 100.py
+        # Otherwise random move
         angle = random.uniform(0, 2 * math.pi)
         speed = self.dna.speed * (1 - self.emotion.fear * 0.5)
         self.x += math.cos(angle) * speed
         self.y += math.sin(angle) * speed
 
-        # Keep within bounds - from 100.py
+        # Keep within bounds
         self.x = max(10, min(WIDTH - 10, self.x))
         self.y = max(10, min(HEIGHT - 10, self.y))
 
@@ -580,7 +580,7 @@ class Organism:
         self.x += math.cos(angle) * speed
         self.y += math.sin(angle) * speed
 
-        # Keep within bounds - from 100.py
+        # Keep within bounds
         self.x = max(10, min(WIDTH - 10, self.x))
         self.y = max(10, min(HEIGHT - 10, self.y))
 
@@ -600,7 +600,7 @@ class Organism:
         if not foods:
             return
 
-        # Find closest food - from 100.py
+        # Find closest food
         closest = None
         min_dist = float('inf')
 
@@ -610,7 +610,7 @@ class Organism:
                 min_dist = dist
                 closest = food
 
-        # Move toward food - from 100.py
+        # Move toward food
         if closest and min_dist < self.dna.vision_range:
             self.move_toward(closest.x, closest.y)
 
@@ -618,7 +618,7 @@ class Organism:
         if not foods:
             return
 
-        # Find closest food - from 100.py
+        # Find closest food
         closest = None
         min_dist = float('inf')
 
@@ -632,7 +632,7 @@ class Organism:
             if min_dist > 10:
                 self.move_toward(closest.x, closest.y)
             elif self.home:
-                # Bring food to home settlement - from 100.py
+                # Bring food to home settlement
                 if min_dist < 10:
                     self.home.food_storage += closest.energy
                     foods.remove(closest)
@@ -644,7 +644,7 @@ class Organism:
         if not self.tribe or not self.tribe.enemies:
             return
 
-        # Find closest enemy - from 100.py
+        # Find closest enemy
         closest_enemy = None
         min_dist = float('inf')
 
@@ -657,13 +657,13 @@ class Organism:
 
         if closest_enemy:
             if min_dist < 20:
-                # Attack - from 100.py
+                # Attack
                 damage = self.dna.aggression * 10
                 closest_enemy.energy -= damage
                 self.emotion.rage = min(1.0, self.emotion.rage + 0.05)
 
                 if closest_enemy.energy <= 0:
-                    # Log historical event - from 100.py
+                    # Log historical event
                     event = HistoricalEvent(
                         time=time.time(),
                         event_type=EventType.WAR,
@@ -679,7 +679,7 @@ class Organism:
         if not self.home or not self.home.food_storage > 50:
             return
 
-        # Find a random spot near settlement to build - from 100.py
+        # Find a random spot near settlement to build
         build_x = self.home.x + random.uniform(-100, 100)
         build_y = self.home.y + random.uniform(-100, 100)
 
@@ -687,7 +687,7 @@ class Organism:
             self.path = self.create_path(build_x, build_y)
 
         if math.sqrt((self.x - build_x)**2 + (self.y - build_y)**2) < 10:
-            # Build a structure - from 100.py
+            # Build a structure
             structure_type = random.choice([
                 StructureType.HUT,
                 StructureType.STORAGE,
@@ -707,7 +707,7 @@ class Organism:
             self.home.food_storage -= 50
             self.emotion.joy = min(1.0, self.emotion.joy + 0.1)
 
-            # Log historical event - from 100.py
+            # Log historical event
             event = HistoricalEvent(
                 time=time.time(),
                 event_type=EventType.SETTLEMENT_BUILT,
@@ -718,7 +718,7 @@ class Organism:
             heapq.heappush(historical_events, event)
 
     def create_path(self, target_x, target_y):
-        # Simple pathfinding - straight line with intermediate points - from 100.py
+        # Simple pathfinding - straight line with intermediate points
         path = []
         steps = max(2, int(math.sqrt((target_x - self.x)**2 + (target_y - self.y)**2) / 50))
 
@@ -744,7 +744,7 @@ class Organism:
                 break
 
     def social_interactions(self, organisms, tribes):
-        # Find nearby organisms - from 100.py
+        # Find nearby organisms
         nearby = []
         for org in organisms:
             if org != self:
@@ -755,40 +755,40 @@ class Organism:
         if not nearby:
             return
 
-        # Sort by distance - from 100.py
+        # Sort by distance
         nearby.sort(key=lambda x: x[1])
         closest_org, dist = nearby[0]
 
-        # Fear response - from 100.py
+        # Fear response
         if (closest_org.dna.size > self.dna.size * 1.5 and self.emotion.fear > 0.3 and
             (not self.tribe or closest_org.tribe != self.tribe)):
-            # Move away from larger organisms - from 100.py
+            # Move away from larger organisms
             angle = math.atan2(self.y - closest_org.y, self.x - closest_org.x)
             self.x += math.cos(angle) * self.dna.speed * 0.8
             self.y += math.sin(angle) * self.dna.speed * 0.8
             self.memory.events.append(("fear", self.age, closest_org.id))
 
-        # Social bonding - from 100.py
+        # Social bonding
         elif (self.dna.sociability > 0.5 and dist < 30 and self.emotion.fear < 0.4 and
               closest_org.tribe == self.tribe):
             self.emotion.joy = min(1.0, self.emotion.joy + 0.02)
             closest_org.emotion.joy = min(1.0, closest_org.emotion.joy + 0.02)
             self.memory.events.append(("bond", self.age, closest_org.id))
 
-            # Share beliefs and language - from 100.py
+            # Share beliefs and language
             if current_phase.value >= Phase.LANGUAGE.value:
                 if random.random() < 0.1:
                     self.share_beliefs(closest_org)
                 if random.random() < 0.1:
                     self.share_language(closest_org)
 
-        # Tribe formation - from 100.py
+        # Tribe formation
         if (current_phase.value >= Phase.TRIBAL.value and not self.tribe and
             dist < 50 and self.dna.sociability > 0.6 and closest_org.dna.sociability > 0.6):
             self.form_tribe(closest_org, tribes)
 
     def share_beliefs(self, other):
-        # Share a random belief - from 100.py
+        # Share a random belief
         if hasattr(self, 'belief'): # Added hasattr check
             if self.belief.origin_story and random.random() < 0.5:
                 other.belief.origin_story = self.belief.origin_story
@@ -802,13 +802,13 @@ class Organism:
                     other.belief.myths.append(myth)
 
     def share_language(self, other):
-        # Share a random glyph meaning - from 100.py
+        # Share a random glyph meaning
         if self.language and other.language:
             self_glyph, self_meaning = random.choice(list(self.language.items()))
             other.language[self_glyph] = self_meaning
 
     def form_tribe(self, other, tribes):
-        # Create a new tribe - from 100.py
+        # Create a new tribe 
         new_tribe = Tribe(
             tribe_id=f"Tribe-{uuid.uuid4().hex[:4]}",
             color=(random.randint(100, 255), random.randint(100, 255), random.randint(100, 255))
@@ -819,13 +819,13 @@ class Organism:
         self.tribe = new_tribe
         other.tribe = new_tribe
 
-        # Create shared beliefs - from 100.py
+        # Create shared beliefs 
         if hasattr(self, 'belief') and self.belief.origin_story: # Added hasattr check
             new_tribe.shared_beliefs.origin_story = self.belief.origin_story
         elif hasattr(other, 'belief') and other.belief.origin_story: # Added hasattr check
             new_tribe.shared_beliefs.origin_story = other.belief.origin_story
 
-        # Create shared language - from 100.py
+        # Create shared language 
         for glyph, meaning in self.language.items():
             new_tribe.language[glyph] = meaning
         for glyph, meaning in other.language.items():
@@ -834,7 +834,7 @@ class Organism:
 
         tribes.append(new_tribe)
 
-        # Log historical event - from 100.py
+        # Log historical event 
         event = HistoricalEvent(
             time=time.time(),
             event_type=EventType.TRIBE_FORMED,
@@ -848,7 +848,7 @@ class Organism:
         if self.energy < 100: # Easier reproduction
             return
 
-        # Find mate - from 100.py
+        # Find mate  
         mate = None
         for org in organisms:
             if (org != self and org.energy > 90 and # Easier reproduction
@@ -858,13 +858,13 @@ class Organism:
                 break
 
         if mate:
-            # Create offspring - from 100.py
+            # Create offspring 
             self.energy -= 50 # Reduced energy cost
             mate.energy -= 50 # Reduced energy cost
             offspring = Organism(
                 (self.x + mate.x)/2, (self.y + mate.y)/2, parents=[self, mate]
             )
-            # Inherit tribe - from 100.py
+            # Inherit tribe
             if self.tribe:
                 offspring.tribe = self.tribe
                 self.tribe.members.append(offspring)
@@ -872,7 +872,7 @@ class Organism:
             self.last_reproduction_time = time.time()
             self.memory.events.append(("reproduce", self.age, mate.id))
 
-            # Log historical event - from 100.py
+            # Log historical event
             event = HistoricalEvent(
                 time=time.time(),
                 event_type=EventType.REPRODUCTION,
@@ -881,7 +881,7 @@ class Organism:
                 involved=[self, mate, offspring]
             )
             heapq.heappush(historical_events, event)
-            # print(f"Mating Event: Parent1={self.id} (Size={self.dna.size:.2f}, Shape={self.dna.shape}), " # From gmfinal_enhanced.py
+            # print(f"Mating Event: Parent1={self.id} (Size={self.dna.size:.2f}, Shape={self.dna.shape}), " 
             #       f"Parent2={mate.id} (Size={mate.dna.size:.2f}, Shape={mate.dna.shape}), "
             #       f"Offspring={offspring.id} (Size={offspring.dna.size:.2f}, Shape={offspring.dna.shape}) "
             #       f"at ({offspring.x:.1f}, {offspring.y:.1f})")
@@ -893,7 +893,7 @@ class Organism:
         self.memory.events.append(("dream_start", self.age))
 
     def dream(self):
-        # Dreaming logic - from 100.py
+        # Dreaming logic 
         current_time = time.time()
         if current_time - self.dream_start_time > self.dream_duration:
             self.dreaming = False
@@ -901,7 +901,7 @@ class Organism:
             self.form_beliefs_from_dream()
             return
 
-        # Random dream content based on memories - from 100.py
+        # Random dream content based on memories 
         if self.memory.events:
             memory = random.choice(list(self.memory.events))
             self.memory.dreams.append(memory)
@@ -912,24 +912,24 @@ class Organism:
         dream = random.choice(self.memory.dreams)
         event_type = dream[0]
         if event_type == "trauma":
-            # Form protective belief - from 100.py
+            # Form protective belief 
             belief = f"The {random.choice(['Spirits', 'Ancients', 'Dreamwalkers', 'Star-Beings'])} warn of {dream[2]}"
             self.belief.rituals.append(belief)
-            # Share with tribe - from 100.py
+            # Share with tribe 
             if self.tribe and random.random() < 0.3:
                 self.tribe.shared_beliefs.rituals.append(belief)
         elif event_type == "bond":
-            # Form social belief - from 100.py
+            # Form social belief 
             belief = f"Bonding brings favor from the {random.choice(['Sky', 'Earth', 'Water', 'Moon'])} Spirits"
             self.belief.rituals.append(belief)
         elif event_type == "death":
-            # Form afterlife belief - from 100.py
+            # Form afterlife belief 
             belief = f"After death, we join the {random.choice(['Eternal Light', 'Great Dream', 'Silent Void', 'Star Council'])}"
             self.belief.deities.append(belief)
-            # Create a myth - from 100.py
+            # Create a myth 
             myth = f"How {random.choice(['the First Being', 'the Sky God', 'the Earth Mother'])} conquered death"
             self.belief.myths.append(myth)
-            # Log historical event - from 100.py
+            # Log historical event 
             event = HistoricalEvent(
                 time=time.time(),
                 event_type=EventType.MYTH_CREATED,
@@ -940,30 +940,30 @@ class Organism:
             heapq.heappush(historical_events, event)
 
     def die(self, organisms, tribes):
-        # Create corpse - from 100.py
+        # Create corpse 
         global corpses
         corpses.append((self.x, self.y, self.dna.size))
-        # Remove from organisms list - from 100.py
+        # Remove from organisms list 
         if self in organisms:
             organisms.remove(self)
-        # Remove from tribe - from 100.py
+        # Remove from tribe 
         if self.tribe and self in self.tribe.members:
             self.tribe.members.remove(self)
         if self.role == Role.LEADER and self.tribe and self.tribe.members: # Added check for tribe.members
-            # Appoint new leader - from 100.py
+            # Appoint new leader 
             new_leader = max(self.tribe.members, key=lambda m: m.dna.intelligence)
             new_leader.role = Role.LEADER
             self.tribe.leader = new_leader
-        # Add to memory of nearby organisms - from 100.py
+        # Add to memory of nearby organisms 
         for org in organisms:
             dist = math.sqrt((self.x - org.x)**2 + (self.y - org.y)**2)
             if dist < org.dna.vision_range:
                 org.memory.events.append(("death", org.age, self.id))
                 org.emotion.sorrow = min(1.0, org.emotion.sorrow + 0.3)
-        # print(f"Organism {self.id} died at age {self.age}") # From gmfinal_enhanced.py
+        # print(f"Organism {self.id} died at age {self.age}") 
 
     def draw(self, screen_surface):
-        # Calculate emotional color safely - from 100.py
+        # Calculate emotional color safely 
         r = self.dna.color[0] * (1 - self.emotion.fear) + 120 * self.emotion.rage
         g = self.dna.color[1] * (1 - self.emotion.rage) + 180 * self.emotion.joy
         b = self.dna.color[2] * (1 - self.emotion.hunger) + 220 * self.emotion.fear
@@ -972,18 +972,18 @@ class Organism:
         b = int(max(0, min(255, b * brightness))) # Apply brightness
         color = (r, g, b)
 
-        # Apply camera and zoom transformation - from 100.py
+        # Apply camera and zoom transformation 
         display_x = self.x * zoom + camera_x
         display_y = self.y * zoom + camera_y
         display_size = self.dna.size * zoom
 
-        # Add base glow for visibility - from 100.py
+        # Add base glow for visibility 
         glow_size = display_size + 6
         glow_surf = pygame.Surface((glow_size*2, glow_size*2), pygame.SRCALPHA)
         pygame.draw.circle(glow_surf, (*color, 40), (glow_size, glow_size), glow_size)
         screen_surface.blit(glow_surf, (display_x - glow_size, display_y - glow_size))
 
-        # Dream aura or disease aura - from 100.py
+        # Dream aura or disease aura 
         if self.dreaming:
             aura_size = display_size + 10
             aura_surf = pygame.Surface((aura_size*2, aura_size*2), pygame.SRCALPHA)
@@ -996,19 +996,19 @@ class Organism:
             pygame.draw.circle(aura_surf, (*disease_color_bright, 70), (aura_size, aura_size), aura_size)
             screen_surface.blit(aura_surf, (display_x - aura_size, display_y - aura_size))
 
-        # Draw organism shape - from 100.py
+        # Draw organism shape 
         if self.dna.shape == 'circle':
             pygame.draw.circle(screen_surface, color, (int(display_x), int(display_y)), int(display_size))
-        elif self.dna.shape == 'triangle': # From gmfinal_enhanced.py
+        elif self.dna.shape == 'triangle': 
             points = [
                 (display_x, display_y - display_size),
                 (display_x - display_size * 0.866, display_y + display_size * 0.5),
                 (display_x + display_size * 0.866, display_y + display_size * 0.5)
             ]
             pygame.draw.polygon(screen_surface, color, points)
-        elif self.dna.shape == 'square': # From gmfinal_enhanced.py
+        elif self.dna.shape == 'square': 
             pygame.draw.rect(screen_surface, color, (display_x - display_size, display_y - display_size, display_size * 2, display_size * 2))
-        else:  # pentagon - from 100.py
+        else:  # pentagon 
             points = []
             for i in range(5):
                 angle = math.radians(i * 72 - 90)
@@ -1017,7 +1017,7 @@ class Organism:
                 points.append((px, py))
             pygame.draw.polygon(screen_surface, color, points)
 
-        # Draw limbs - from 100.py
+        # Draw limbs 
         for i in range(self.dna.limb_count):
             angle = math.radians(i * (360 / self.dna.limb_count))
             limb_length = display_size * 1.5
@@ -1025,15 +1025,15 @@ class Organism:
             end_y = display_y + limb_length * math.sin(angle)
             pygame.draw.line(screen_surface, color, (int(display_x), int(display_y)), (int(end_x), int(end_y)), max(1, int(3 * zoom)))
 
-        # Draw glyph if language is enabled - from 100.py
+        # Draw glyph if language is enabled 
         if current_phase.value >= Phase.LANGUAGE.value and show_language:
-            # Draw black outline - from 4.py
+            # Draw black outline 
             outline_surf = font_medium.render(self.glyph, True, (0, 0, 0))
             screen_surface.blit(outline_surf, (display_x - outline_surf.get_width()/2 + 1, display_y - display_size - 15 + 1))
-            glyph_surf = font_medium.render(self.glyph, True, (255, 255, 255)) # White text - from 4.py
+            glyph_surf = font_medium.render(self.glyph, True, (255, 255, 255)) # White text 
             screen_surface.blit(glyph_surf, (display_x - glyph_surf.get_width()/2, display_y - display_size - 15))
 
-        # Draw role icon (Unicode symbols) - from 100.py
+        # Draw role icon (Unicode symbols) 
         if self.role and current_phase.value >= Phase.CIVILIZATION.value:
             role_icon = ""
             if self.role == Role.LEADER:
@@ -1049,20 +1049,20 @@ class Organism:
             elif self.role == Role.HEALER:
                 role_icon = u"\u271A"  # ✚
 
-            # Draw black outline - from 4.py
+            # Draw black outline 
             outline_surf = font_medium.render(role_icon, True, (0, 0, 0))
             screen_surface.blit(outline_surf, (display_x - outline_surf.get_width()/2 + 1, display_y - display_size - 30 + 1))
-            role_surf = font_medium.render(role_icon, True, (255, 255, 255)) # White text - from 4.py
+            role_surf = font_medium.render(role_icon, True, (255, 255, 255)) # White text 
             screen_surface.blit(role_surf, (display_x - role_surf.get_width()/2, display_y - display_size - 30))
 
-        # Optional: show path - from 100.py
+        # Optional: show path 
         if show_paths and self.path:
-            # Transform path coordinates - from 100.py
+            # Transform path coordinates 
             transformed_path = [(p_x * zoom + camera_x, p_y * zoom + camera_y) for p_x, p_y in self.path]
             for i in range(len(transformed_path) - 1):
                 pygame.draw.line(screen_surface, (200, 150, 100, 150), transformed_path[i], transformed_path[i+1], max(1, int(2 * zoom)))
 
-    def to_dict(self): # From 4.py
+    def to_dict(self): 
         return {
             "id": self.id,
             "x": self.x,
@@ -1097,7 +1097,7 @@ class Organism:
         }
 
     @staticmethod
-    def from_dict(data): # From 4.py
+    def from_dict(data): 
         dna = DNA()
         dna.color = tuple(data["dna"]["color"])
         dna.size = data["dna"]["size"]
@@ -1130,7 +1130,7 @@ class Organism:
         org.temp_disease_id = data.get("disease_id")
         return org
 
-    def get_stats(self): # From gmfinal_enhanced.py
+    def get_stats(self): 
         return (f"ID: {self.id} | Age: {self.age} | Energy: {self.energy:.1f} | "
                 f"Emotion: Fear={self.emotion.fear:.2f}, Rage={self.emotion.rage:.2f}, "
                 f"Hunger={self.emotion.hunger:.2f}, Joy={self.emotion.joy:.2f}, "
@@ -1149,9 +1149,9 @@ class Food:
         self.y = y
         self.energy = random.uniform(10, 30)
         self.size = 5
-        self.biome = self.get_biome_at(x, y) # From gmfinal_enhanced.py
+        self.biome = self.get_biome_at(x, y) 
 
-    def get_biome_at(self, x, y): # From gmfinal_enhanced.py
+    def get_biome_at(self, x, y): 
         x_idx = min(max(0, int(x // 10)), len(elevation) - 1)
         y_idx = min(max(0, int(y // 10)), len(elevation[0]) - 1)
         elev = elevation[x_idx][y_idx]
@@ -1174,12 +1174,12 @@ class Food:
         return Biome.PLAINS
 
     def draw(self, screen_surface):
-        # Apply camera and zoom transformation - from 100.py
+        # Apply camera and zoom transformation 
         display_x = self.x * zoom + camera_x
         display_y = self.y * zoom + camera_y
         display_size = self.size * zoom
 
-        # Apply brightness to food color - from 100.py
+        # Apply brightness to food color 
         food_color_bright = tuple(int(c * brightness) for c in FOOD_COLOR)
 
         pygame.draw.circle(screen_surface, food_color_bright, (int(display_x), int(display_y)), int(display_size))
@@ -1196,8 +1196,8 @@ class World:
         self.settlements = []
         self.corpses = []
         self.current_time = 0
-        self.event_log = deque(maxlen=20) # Keep last 20 events for display - from 100.py
-        self.diseases = {} # Store active diseases - from 100.py
+        self.event_log = deque(maxlen=20) # Keep last 20 events for display 
+        self.diseases = {} # Store active diseases 
 
         self.spawn_initial_organisms(50)
         self.spawn_initial_food(100)
@@ -1206,9 +1206,9 @@ class World:
         for _ in range(count):
             x = random.randint(50, WIDTH - 50)
             y = random.randint(50, HEIGHT - 50)
-            org = Organism(x, y) # From gmfinal_enhanced.py
+            org = Organism(x, y) 
             self.organisms.append(org)
-            # print(f"Organism {org.id} born at ({x}, {y})") # From gmfinal_enhanced.py
+            # print(f"Organism {org.id} born at ({x}, {y})") 
 
     def spawn_initial_food(self, count):
         for _ in range(count):
@@ -1220,30 +1220,30 @@ class World:
         global current_phase
         self.current_time += 1 * simulation_speed
 
-        # Advance evolution phase - from 100.py
+        # Advance evolution phase 
         self.advance_phase()
 
-        # Update organisms - from 100.py
+        # Update organisms 
         for organism in self.organisms[:]:
             organism.update(self.organisms, self.foods, self.tribes, self.settlements, self.current_time)
 
-        # Update tribes - from 100.py
+        # Update tribes 
         for tribe in self.tribes[:]:
             self.update_tribe(tribe)
             if not tribe.members:
                 self.tribes.remove(tribe)
 
-        # Update settlements - from 100.py
+        # Update settlements 
         for settlement in self.settlements[:]:
             self.update_settlement(settlement)
             if not settlement.population:
                 self.settlements.remove(settlement)
 
-        # Replenish food - from 100.py (modified for consistent food regeneration)
+        # Replenish food  (modified for consistent food regeneration)
         food_spawn_rate = 0.5 # Increased food spawn rate
-        if weather_state == "rain": # From gmfinal_enhanced.py
+        if weather_state == "rain": 
             food_spawn_rate *= 1.5
-        elif weather_state == "storm": # From gmfinal_enhanced.py
+        elif weather_state == "storm": 
             food_spawn_rate *= 0.5
 
         if random.random() < food_spawn_rate:
@@ -1251,17 +1251,17 @@ class World:
             y = random.randint(50, HEIGHT - 50)
             self.foods.append(Food(x, y))
 
-        # Clean up corpses - from 100.py
+        # Clean up corpses 
         self.corpses = [(x, y, s) for x, y, s in self.corpses if random.random() > 0.005] # Slower decay
 
-        # Process historical events - from 100.py
+        # Process historical events 
         while historical_events:
             event = heapq.heappop(historical_events)
             self.event_log.append(f"Day {int(self.current_time/100)}: {event.description}")
             if len(self.event_log) > 20:
                 self.event_log.popleft()
 
-        # Disease spread and mutation - from 100.py
+        # Disease spread and mutation 
         self.manage_diseases()
 
     def advance_phase(self):
@@ -1280,7 +1280,7 @@ class World:
         elif current_phase == Phase.EMOTION and avg_intelligence > 0.4 and self.current_time > 10000:
             new_phase = Phase.DREAM
         elif current_phase == Phase.DREAM and self.current_time > 15000 and random.random() < 0.0001:
-            # Cannibalism phase - rare trigger - from 100.py
+            # Cannibalism phase - rare trigger 
             new_phase = Phase.CANNIBAL
         elif current_phase == Phase.CANNIBAL and self.current_time > 20000 and num_tribes > 0:
             new_phase = Phase.TRIBAL
@@ -1297,8 +1297,8 @@ class World:
             self.form_settlements()
 
         if new_phase != current_phase:
-            # print(f"Advancing to new phase: {new_phase.name}") # From 100.py
-            event = HistoricalEvent( # From gmfinal_enhanced.py
+            # print(f"Advancing to new phase: {new_phase.name}") 
+            event = HistoricalEvent( 
                 time=self.current_time,
                 event_type=EventType.DISCOVERY,
                 description=f"New phase: {new_phase.name}",
@@ -1308,7 +1308,7 @@ class World:
             current_phase = new_phase
 
     def introduce_language(self):
-        # Assign basic glyph meanings - from 100.py
+        # Assign basic glyph meanings 
         for org in self.organisms:
             if not org.language:
                 org.language["△"] = "food"
@@ -1325,7 +1325,7 @@ class World:
                 tribe.language["□"] = "water"
 
     def introduce_disease(self):
-        # From 100.py
+        
         disease_types = list(DiseaseType)
         new_disease = Disease(
             disease_id=f"Disease-{uuid.uuid4().hex[:4]}",
@@ -1355,19 +1355,19 @@ class World:
     def manage_diseases(self):
         for organism in self.organisms[:]:
             if organism.disease:
-                # Spread disease - from 100.py
+                # Spread disease 
                 for other_org in self.organisms:
                     if other_org != organism and not other_org.disease:
                         dist = math.sqrt((organism.x - other_org.x)**2 + (organism.y - other_org.y)**2)
                         if dist < 30 and random.random() < organism.disease.transmission_rate:
-                            # Check immunity - from 100.py
+                            # Check immunity 
                             if random.random() > other_org.dna.immunity + other_org.immunities.get(organism.disease.disease_id, 0):
                                 other_org.disease = organism.disease
                                 other_org.disease_start_time = self.current_time
                                 other_org.symptoms.extend(organism.disease.symptoms)
 
     def form_settlements(self):
-        # Create initial settlements from existing tribes - from 100.py
+        # Create initial settlements from existing tribes 
         for tribe in self.tribes:
             if not tribe.settlements and len(tribe.members) > 5:
                 leader = max(tribe.members, key=lambda m: m.dna.intelligence)
@@ -1384,7 +1384,7 @@ class World:
                 tribe.settlements.append(new_settlement)
                 self.settlements.append(new_settlement)
 
-                # Assign roles to tribe members and set home - from 100.py
+                # Assign roles to tribe members and set home 
                 for member in tribe.members:
                     member.home = new_settlement
                     if member == leader:
@@ -1408,7 +1408,7 @@ class World:
                 heapq.heappush(historical_events, event)
 
     def update_tribe(self, tribe):
-        # Update tribe's territory based on members - from 100.py
+        # Update tribe's territory based on members 
         if tribe.members:
             all_x = [m.x for m in tribe.members]
             all_y = [m.y for m in tribe.members]
@@ -1416,22 +1416,22 @@ class World:
             min_y, max_y = min(all_y), max(all_y)
             tribe.territory = [(min_x - 20, min_y - 20), (max_x + 20, max_y + 20)]
 
-        # Check for leadership - from 100.py
+        # Check for leadership 
         if not tribe.leader and tribe.members:
             tribe.leader = max(tribe.members, key=lambda m: m.dna.intelligence)
             tribe.leader.role = Role.LEADER
 
-        # Conflict with other tribes - from 100.py
+        # Conflict with other tribes 
         if current_phase.value >= Phase.CONFLICT.value and self.current_time - tribe.last_war_time > 1000:
             for other_tribe in self.tribes:
                 if other_tribe != tribe and other_tribe not in tribe.allies:
-                    # Check for overlapping territories or proximity - from 100.py
+                    # Check for overlapping territories or proximity 
                     if tribe.territory and other_tribe.territory:
                         rect1 = pygame.Rect(tribe.territory[0], (tribe.territory[1][0] - tribe.territory[0][0], tribe.territory[1][1] - tribe.territory[0][1]))
                         rect2 = pygame.Rect(other_tribe.territory[0], (other_tribe.territory[1][0] - other_tribe.territory[0][0], other_tribe.territory[1][1] - other_tribe.territory[0][1]))
 
                         if rect1.colliderect(rect2):
-                            if random.random() < 0.05 * tribe.leader.dna.aggression: # Chance of war - from 100.py
+                            if random.random() < 0.05 * tribe.leader.dna.aggression: # Chance of war 
                                 tribe.enemies.append(other_tribe)
                                 other_tribe.enemies.append(tribe)
                                 tribe.last_war_time = self.current_time
@@ -1449,22 +1449,22 @@ class World:
     def update_settlement(self, settlement):
         settlement.population = len([o for o in settlement.tribe.members if o.home == settlement])
 
-        # Passive food generation - from 100.py
+        # Passive food generation 
         settlement.food_storage += random.uniform(0.1, 0.5)
 
-        # Build more structures if needed - from 100.py
+        # Build more structures if needed 
         if settlement.population > len(settlement.structures) * 2 and settlement.food_storage > 100:
             builder_found = False
             for member in settlement.tribe.members:
                 if member.role == Role.BUILDER:
                     builder_found = True
                     break
-            if not builder_found: # If no builder, make one - from 100.py
+            if not builder_found: # If no builder, make one 
                 if settlement.tribe.members:
                     new_builder = random.choice(settlement.tribe.members)
                     new_builder.role = Role.BUILDER
 
-    def draw(self): # From 4.py
+    def draw(self): 
         # Create a temporary surface to apply brightness before blitting to screen
         temp_surface = pygame.Surface(screen.get_size())
         temp_surface.fill(BACKGROUND)
@@ -1482,7 +1482,7 @@ class World:
         for food in self.foods:
             food.draw(temp_surface)
 
-        # Draw settlements and structures - from gmfinal_enhanced.py
+        # Draw settlements and structures 
         for settlement in self.settlements:
             display_x = settlement.x * zoom + camera_x
             display_y = settlement.y * zoom + camera_y
@@ -1506,12 +1506,12 @@ class World:
                 elif structure.structure_type == StructureType.WATCHTOWER:
                     pygame.draw.rect(temp_surface, color, (display_x - display_size/2, display_y - display_size*2, display_size, display_size*2))
 
-            # Population text - from 4.py
+            # Population text 
             self._draw_text_with_outline(temp_surface, f"Pop: {settlement.population}", font_small, (display_x + display_radius + 5, display_y - 10))
-            # Food storage text - from 4.py
+            # Food storage text 
             self._draw_text_with_outline(temp_surface, f"Food: {int(settlement.food_storage)}", font_small, (display_x + display_radius + 5, display_y + 10))
 
-            for structure in settlement.structures: # From 4.py (drawing structures)
+            for structure in settlement.structures:
                 structure_x = structure.x * zoom + camera_x
                 structure_y = structure.y * zoom + camera_y
                 structure_size = structure.size * zoom
@@ -1530,7 +1530,7 @@ class World:
         for organism in self.organisms:
             organism.draw(temp_surface)
 
-        # Draw territories - from gmfinal_enhanced.py
+        # Draw territories 
         if show_territories:
             for tribe in self.tribes:
                 if tribe.members:
@@ -1540,7 +1540,7 @@ class World:
                     display_y = center_y * zoom + camera_y
                     radius = 80 * zoom
                     pygame.draw.circle(temp_surface, tribe.color + (100,), (int(display_x), int(display_y)), int(radius), 2)
-                if tribe.territory: # From 4.py (more detailed territory drawing)
+                if tribe.territory:  
                     x1, y1 = tribe.territory[0]
                     x2, y2 = tribe.territory[1]
 
@@ -1566,14 +1566,14 @@ class World:
         screen.blit(temp_surface, (0, 0))
         pygame.display.flip()
 
-    def _draw_text_with_outline(self, surface, text, font, pos, text_color=(255, 255, 255), outline_color=(0, 0, 0)): # From 4.py
+    def _draw_text_with_outline(self, surface, text, font, pos, text_color=(255, 255, 255), outline_color=(0, 0, 0)): 
         """Helper to draw text with a black outline."""
         outline_surface = font.render(text, True, outline_color)
         text_surface = font.render(text, True, text_color)
         surface.blit(outline_surface, (pos[0] + 1, pos[1] + 1)) # Shadow/outline offset
         surface.blit(text_surface, pos)
 
-    def draw_terrain(self, screen_surface): # From 4.py
+    def draw_terrain(self, screen_surface): 
         # Only draw visible portion of the terrain based on camera and zoom
         tile_size_scaled = max(1, int(10 * zoom))
 
@@ -1616,7 +1616,7 @@ class World:
                 draw_y = y_idx * 10 * zoom + camera_y
                 pygame.draw.rect(screen_surface, color_bright, (int(draw_x), int(draw_y), tile_size_scaled, tile_size_scaled))
 
-    def draw_ui(self, screen_surface): # Combined from gmfinal_enhanced.py and 4.py
+    def draw_ui(self, screen_surface): 
         # Top-left info
         info_lines = [
             f"Current Time: {int(self.current_time/100)} Days",
@@ -1644,12 +1644,12 @@ class World:
         # Legend
         self.draw_legend(screen_surface)
 
-        # Selected Organism Overlay - from 4.py
+        # Selected Organism Overlay 
         global selected_organism
         if selected_organism:
             self.draw_selected_organism_overlay(screen_surface, selected_organism)
 
-        # Controls text - from gmfinal_enhanced.py
+        # Controls text 
         controls_text = [
             "P: Pause/Resume | R: Reset | D: Debug | L: Language | M: Mating | C: Conflicts",
             "T: Territories | I: Disease | H: History | G: Paths | S: Save | O: Load | K: Console",
@@ -1659,14 +1659,14 @@ class World:
             control_surf = font_small.render(line, True, TEXT_COLOR)
             screen_surface.blit(control_surf, (10, HEIGHT - 60 + i * 15))
 
-        # Draw debug overlay (for selected organism) - from gmfinal_enhanced.py
+        # Draw debug overlay (for selected organism) 
         if show_debug_overlay and selected_organism:
             stats = selected_organism.get_stats().split(" | ")
             for i, stat in enumerate(stats):
                 stat_surf = font_small.render(stat, True, TEXT_COLOR)
                 screen_surface.blit(stat_surf, (WIDTH - 300, 10 + i * 15))
 
-        # Draw console - from gmfinal_enhanced.py
+        # Draw console 
         if show_console:
             console_surf = pygame.Surface((WIDTH - 20, 50), pygame.SRCALPHA)
             console_surf.fill((20, 20, 50, 200))
@@ -1675,7 +1675,7 @@ class World:
             screen_surface.blit(input_text, (20, HEIGHT - 60))
 
 
-    def draw_debug_info(self, screen_surface): # From 4.py
+    def draw_debug_info(self, screen_surface): 
         for organism in self.organisms:
             # Transform organism position for debug text
             display_x = organism.x * zoom + camera_x
@@ -1691,7 +1691,7 @@ class World:
 
             self._draw_text_with_outline(screen_surface, debug_text, font_small, (display_x + 20, display_y - 20), (255, 255, 0)) # Yellow text for debug
 
-    def draw_legend(self, screen_surface): # From 4.py
+    def draw_legend(self, screen_surface): 
         legend_x = WIDTH - 180
         legend_y = 10
         pygame.draw.rect(screen_surface, (30, 30, 50), (legend_x - 10, legend_y - 10, 170, 200))
@@ -1729,7 +1729,7 @@ class World:
                 self._draw_text_with_outline(screen_surface, f"{symbol} {description}", font_small, (legend_x, legend_y))
                 legend_y += 15
 
-    def draw_selected_organism_overlay(self, screen_surface, org): # From 4.py
+    def draw_selected_organism_overlay(self, screen_surface, org): 
         stats_box = pygame.Surface((240, 190), pygame.SRCALPHA) # Increased height for more stats
         stats_box.fill((0, 0, 0, 180)) # Semi-transparent black background
         pygame.draw.rect(stats_box, (255, 255, 255), stats_box.get_rect(), 2) # White outline
@@ -1758,7 +1758,7 @@ class World:
         screen_surface.blit(stats_box, (10, 500)) # Position the overlay
 
 
-# Save/Load System - from 4.py (with additions from gmfinal_enhanced.py for diseases)
+# Save/Load System  (with additions from gmfinal_enhanced.py for diseases)
 def save_simulation(filename="save.json"):
     # Convert tribes and settlements to simple dictionaries for saving
     tribes_data = {}
@@ -1798,7 +1798,7 @@ def save_simulation(filename="save.json"):
             "food_storage": settlement.food_storage
         }
 
-    # Convert diseases to dictionaries - from gmfinal_enhanced.py
+    # Convert diseases to dictionaries 
     diseases_data = {}
     for disease_id, disease in world.diseases.items():
         diseases_data[disease_id] = {
@@ -1834,7 +1834,7 @@ def save_simulation(filename="save.json"):
         json.dump(data, f, indent=4)
     print(f"Simulation saved to {filename}")
 
-def load_simulation(filename="save.json"): # From 4.py (with additions from gmfinal_enhanced.py for diseases)
+def load_simulation(filename="save.json"):  
     global world, current_phase, camera_x, camera_y, zoom, brightness, simulation_speed, selected_organism
     try:
         with open(filename, "r") as f:
@@ -1971,7 +1971,7 @@ def load_simulation(filename="save.json"): # From 4.py (with additions from gmfi
     except Exception as e:
         print(f"Failed to load simulation: {e}")
 
-def reset_simulation(): # From 4.py (with additions from gmfinal_enhanced.py)
+def reset_simulation():  
     global world, camera_x, camera_y, zoom, brightness, simulation_speed, current_phase, paused, show_debug, show_language, show_mating, show_dreamers, show_conflicts, show_territories, show_disease, show_history, show_paths, historical_events, corpses, selected_organism, last_autosave_time, weather_state, weather_timer, weather_duration, console_input, show_console, show_debug_overlay
 
     # Reset global variables
@@ -2009,7 +2009,7 @@ def reset_simulation(): # From 4.py (with additions from gmfinal_enhanced.py)
     world = World()
     print("Simulation reset to initial state.")
 
-def process_console_command(command, world): # From gmfinal_enhanced.py
+def process_console_command(command, world): 
     parts = command.strip().lower().split()
     if not parts:
         return
@@ -2054,7 +2054,7 @@ def process_console_command(command, world): # From gmfinal_enhanced.py
     else:
         print(f"Unknown command: {command}")
 
-def create_disease(): # From gmfinal_enhanced.py
+def create_disease(): 
     disease_type = random.choice(list(DiseaseType))
     color = {
         DiseaseType.VIRUS: (200, 50, 50),
@@ -2085,40 +2085,40 @@ last_update = time.time()
 # Game loop
 running = True
 while running:
-    current_time = time.time() # From gmfinal_enhanced.py
+    current_time = time.time() 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            mods = pygame.key.get_mods() # From 4.py
-            if event.key == pygame.K_p: # From gmfinal_enhanced.py (Pause)
+            mods = pygame.key.get_mods() 
+            if event.key == pygame.K_p:  
                 paused = not paused
-            elif event.key == pygame.K_r and not (mods & pygame.KMOD_CTRL): # From gmfinal_enhanced.py (Reset) - modified to avoid conflict
+            elif event.key == pygame.K_r and not (mods & pygame.KMOD_CTRL): 
                 reset_simulation() # Use combined reset function
-            elif event.key == pygame.K_d: # From gmfinal_enhanced.py (Debug)
+            elif event.key == pygame.K_d:
                 show_debug = not show_debug
-            elif event.key == pygame.K_l and not (mods & pygame.KMOD_CTRL): # From gmfinal_enhanced.py (Language) - modified to avoid conflict
+            elif event.key == pygame.K_l and not (mods & pygame.KMOD_CTRL):  
                 show_language = not show_language
-            elif event.key == pygame.K_m: # From gmfinal_enhanced.py (Mating)
+            elif event.key == pygame.K_m:  
                 show_mating = not show_mating
-            elif event.key == pygame.K_c: # From gmfinal_enhanced.py (Conflicts)
+            elif event.key == pygame.K_c:  
                 show_conflicts = not show_conflicts
-            elif event.key == pygame.K_t: # From gmfinal_enhanced.py (Territories)
+            elif event.key == pygame.K_t:  
                 show_territories = not show_territories
-            elif event.key == pygame.K_i: # From gmfinal_enhanced.py (Disease)
+            elif event.key == pygame.K_i:  
                 show_disease = not show_disease
-            elif event.key == pygame.K_h: # From gmfinal_enhanced.py (History)
+            elif event.key == pygame.K_h:  
                 show_history = not show_history
-            elif event.key == pygame.K_g: # From gmfinal_enhanced.py (Paths)
+            elif event.key == pygame.K_g: 
                 show_paths = not show_paths
-            elif event.key == pygame.K_s and (mods & pygame.KMOD_CTRL): # From gmfinal_enhanced.py (Save) - modified for Ctrl+S
+            elif event.key == pygame.K_s and (mods & pygame.KMOD_CTRL):
                 save_simulation()
-            elif event.key == pygame.K_o or (event.key == pygame.K_l and (mods & pygame.KMOD_CTRL)): # From gmfinal_enhanced.py (Load) - modified for Ctrl+L
+            elif event.key == pygame.K_o or (event.key == pygame.K_l and (mods & pygame.KMOD_CTRL)): 
                 load_simulation()
-            elif event.key == pygame.K_k: # From gmfinal_enhanced.py (Console)
+            elif event.key == pygame.K_k:  
                 show_console = not show_console
                 console_input = ""
-            elif show_console: # From gmfinal_enhanced.py
+            elif show_console: 
                 if event.key == pygame.K_RETURN:
                     process_console_command(console_input, world)
                     console_input = ""
@@ -2126,45 +2126,45 @@ while running:
                     console_input = console_input[:-1]
                 elif event.unicode.isprintable():
                     console_input += event.unicode
-            elif event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS: # From gmfinal_enhanced.py (Brightness)
+            elif event.key == pygame.K_PLUS or event.key == pygame.K_EQUALS: 
                 brightness = min(1.5, brightness + 0.1)
-            elif event.key == pygame.K_MINUS: # From gmfinal_enhanced.py (Brightness)
+            elif event.key == pygame.K_MINUS: 
                 brightness = max(0.5, brightness - 0.1)
-            elif event.key == pygame.K_UP: # From 4.py (Simulation Speed) - conflicts with gmfinal_enhanced.py camera
+            elif event.key == pygame.K_UP:   
                 simulation_speed = min(5.0, simulation_speed + 0.1)
-            elif event.key == pygame.K_DOWN: # From 4.py (Simulation Speed) - conflicts with gmfinal_enhanced.py camera
+            elif event.key == pygame.K_DOWN:   
                 simulation_speed = max(0.1, simulation_speed - 0.1)
-            elif event.key == pygame.K_w: # From gmfinal_enhanced.py (Camera)
+            elif event.key == pygame.K_w:  
                 camera_y += 5 / zoom
-            elif event.key == pygame.K_s: # From gmfinal_enhanced.py (Camera)
+            elif event.key == pygame.K_s:  
                 camera_y -= 5 / zoom
-            elif event.key == pygame.K_a: # From gmfinal_enhanced.py (Camera)
+            elif event.key == pygame.K_a:  
                 camera_x += 5 / zoom
-            elif event.key == pygame.K_d: # From gmfinal_enhanced.py (Camera)
+            elif event.key == pygame.K_d:  
                 camera_x -= 5 / zoom
-            elif event.key == pygame.K_r and (mods & pygame.KMOD_CTRL): # From 4.py (Reset)
+            elif event.key == pygame.K_r and (mods & pygame.KMOD_CTRL):  
                 reset_simulation()
-            elif event.key == pygame.K_SPACE: # From 4.py (Pause) - conflicts with gmfinal_enhanced.py
+            elif event.key == pygame.K_SPACE:  
                 paused = not paused
-            elif event.key == pygame.K_LEFTBRACKET: # From 4.py (Brightness) - conflicts with gmfinal_enhanced.py
+            elif event.key == pygame.K_LEFTBRACKET:  
                 brightness = max(0.5, brightness - 0.1)
-            elif event.key == pygame.K_RIGHTBRACKET: # From 4.py (Brightness) - conflicts with gmfinal_enhanced.py
+            elif event.key == pygame.K_RIGHTBRACKET:  
                 brightness = min(2.0, brightness + 0.1)
-            elif event.key == pygame.K_r and not (mods & pygame.KMOD_CTRL): # From 4.py (show_dreamers)
+            elif event.key == pygame.K_r and not (mods & pygame.KMOD_CTRL):  
                 show_dreamers = not show_dreamers
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left click - from gmfinal_enhanced.py
+            if event.button == 1:  # Left click 
                 mouse_x, mouse_y = event.pos
                 world_x = (mouse_x - camera_x) / zoom
                 world_y = (mouse_y - camera_y) / zoom
                 selected_organism = None
                 for org in world.organisms:
-                    # if org.rect.collidepoint(world_x, world_y): # Original from gmfinal_enhanced.py
-                    if (org.x - world_x) ** 2 + (org.y - world_y) ** 2 < (org.dna.size * 1.5) ** 2: # From 4.py for better click detection
+                    # if org.rect.collidepoint(world_x, world_y): 
+                    if (org.x - world_x) ** 2 + (org.y - world_y) ** 2 < (org.dna.size * 1.5) ** 2:  
                         selected_organism = org
-                        # print(org.get_stats()) # Original from gmfinal_enhanced.py
-                        # Detailed print from 4.py
+                        # print(org.get_stats()) 
+                        # Detailed print 
                         print(f"--- Organism Selected ---\n"
                               f"ID: {org.id}\n"
                               f"Position: ({org.x:.1f}, {org.y:.1f})\n"
@@ -2185,38 +2185,38 @@ while running:
                               f"Last Reproduction: {int(world.current_time - org.last_reproduction_time)} (ticks ago)"
                               )
                         break
-            elif event.button == 4:  # Scroll up - from gmfinal_enhanced.py
+            elif event.button == 4:  # Scroll up 
                 zoom = min(2.0, zoom + 0.1)
-            elif event.button == 5:  # Scroll down - from gmfinal_enhanced.py
+            elif event.button == 5:  # Scroll down 
                 zoom = max(0.5, zoom - 0.1)
-    keys = pygame.key.get_pressed() # From gmfinal_enhanced.py
-    if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]: # From gmfinal_enhanced.py
+    keys = pygame.key.get_pressed() 
+    if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]: 
         show_debug_overlay = True
     else:
         show_debug_overlay = False
-    if keys[pygame.K_w]: # From gmfinal_enhanced.py (Camera) - duplicated, but kept for consistency
+    if keys[pygame.K_w]:  
         camera_y += 5 / zoom
-    if keys[pygame.K_s]: # From gmfinal_enhanced.py (Camera) - duplicated, but kept for consistency
+    if keys[pygame.K_s]:   
         camera_y -= 5 / zoom
-    if keys[pygame.K_a]: # From gmfinal_enhanced.py (Camera)
+    if keys[pygame.K_a]:  
         camera_x += 5 / zoom
-    if keys[pygame.K_d]: # From gmfinal_enhanced.py (Camera)
+    if keys[pygame.K_d]:  
         camera_x -= 5 / zoom
-    camera_x = max(-WIDTH, min(WIDTH * (zoom - 1), camera_x)) # From gmfinal_enhanced.py
-    camera_y = max(-HEIGHT, min(HEIGHT * (zoom - 1), camera_y)) # From gmfinal_enhanced.py
-    if current_time - last_update > 1 / 60 and not paused: # From gmfinal_enhanced.py
+    camera_x = max(-WIDTH, min(WIDTH * (zoom - 1), camera_x)) 
+    camera_y = max(-HEIGHT, min(HEIGHT * (zoom - 1), camera_y)) 
+    if current_time - last_update > 1 / 60 and not paused: 
         world.update()
         last_update = current_time
-    # Autosave every 60 seconds - from 4.py
+    # Autosave every 60 seconds 
     if time.time() - last_autosave_time > 60:
         save_simulation()
         last_autosave_time = time.time()
-    # Update weather - from gmfinal_enhanced.py
+    # Update weather 
     if current_time - weather_timer > weather_duration:
         weather_state = random.choice(["clear", "rain", "storm"])
         weather_timer = current_time
         weather_duration = random.uniform(300, 600)
-    # draw_world(world, selected_organism) # Original from gmfinal_enhanced.py
+    # draw_world(world, selected_organism) 
     world.draw() # Use the combined draw method from World class
     pygame.display.flip()
     clock.tick(60)
