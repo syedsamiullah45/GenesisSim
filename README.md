@@ -50,7 +50,7 @@ pip install pygame noise
 Run the simulation
 python genesis.py
 
-Use Cases
+### Use Cases
 Artificial life and symbolic intelligence research
 
 Evolution simulation without machine learning
