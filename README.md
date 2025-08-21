@@ -87,7 +87,8 @@ Single-file .py implementation
 Fully interactive and symbolic
 
 Designed for future 3D, multiplayer, and evolutionary extensions
-
+Preprint paper
+GenesisSim_Preprint.pdf
 White Paper
 For detailed research documentation, see [GenesisSim White Paper (PDF)](GenesisSim_WhitePaper.pdf).
 
