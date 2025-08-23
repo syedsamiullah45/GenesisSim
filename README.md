@@ -4,7 +4,7 @@ This repository contains the **GenesisSim white paper** and **Python source code
 
 **GenesisSim** is a symbolic, memory-driven civilization simulator built entirely in Python using `pygame` and `Perlin noise`.  
 No engines. No sprites. No AI libraries.  
-It simulates the natural emergence of belief systems, dreams, roles, memory, mutation, and death — all from scratch.
+It simulates the natural emergence of belief systems, roles, memory, mutation, and death — all from scratch.
 
 This is not a game. It's a living world, running on logic.
 
@@ -19,7 +19,7 @@ Source Code: [genesis.py](genesis.py)
 - Procedural belief systems generated using symbolic glyphs
 - Tribe formation based on memory, proximity, and belief
 - Disease, energy decay, reproduction, and natural death
-- Click to inspect any organism's stats, beliefs, tribe, memory, and dream state
+- Click to inspect any organism's stats, beliefs, tribe, memory
 - Toggleable overlays for HUD, dreams, and tribes
 - Procedural biome variation and symbolic drift using Perlin noise
 
